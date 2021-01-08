@@ -1,0 +1,513 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Estimation pour drones aériens de type avion 
+\end_layout
+
+\begin_layout Standard
+Le but final est d'obtenir une estimation de la vitesse et de l'attitude
+ du drone en configuration avion..
+\end_layout
+
+\begin_layout Standard
+Après plusieurs vols avec des contrôleurs PixHawk en mode compagnon, on
+ dispose des données suivantes:
+\end_layout
+
+\begin_layout Itemize
+GPS (vitesse et position)
+\end_layout
+
+\begin_layout Itemize
+Magnétomètre
+\end_layout
+
+\begin_layout Itemize
+Accéléromètre
+\end_layout
+
+\begin_layout Itemize
+Gyroscope
+\end_layout
+
+\begin_layout Itemize
+Baromètre
+\end_layout
+
+\begin_layout Itemize
+Pitot
+\end_layout
+
+\begin_layout Itemize
+signaux PWM du radiocontrôleur
+\end_layout
+
+\begin_layout Standard
+Le baromètre et le GPS donnent des mesures quasi identiques: on excluera
+ le baromètre dans la suite.
+\end_layout
+
+\begin_layout Itemize
+Pour une grandeur 
+\begin_inset Formula $u$
+\end_inset
+
+ son estimée 
+\begin_inset Formula $\hat{u}$
+\end_inset
+
+ et sa dérivée temporelle 
+\begin_inset Formula $\dot{u}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $(x_{0},y_{0},z_{0})$
+\end_inset
+
+ les vecteur du repère NED, 
+\begin_inset Formula $(x,y,z)$
+\end_inset
+
+ les vecteur du repère corps.
+ Le produit vectoriel est noté 
+\begin_inset Formula $\times$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v$
+\end_inset
+
+ la vitesse du drone,
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $q,R$
+\end_inset
+
+ le quaternion unitaire et la matrice orthogonale qui représentent l'orientation
+ du drone par rapport au repère.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Omega$
+\end_inset
+
+ le vecteur vitesse de rotation angulaire du repère corps par rapport au
+ repère NED
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Omega_{gyro}$
+\end_inset
+
+ la mesure du gyroscope, 
+\begin_inset Formula $\Omega_{b}$
+\end_inset
+
+ le biais de mesure du gyroscope,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $\delta_{gyro}$
+\end_inset
+
+ le bruit de mesure de moyenne nulle
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $g$
+\end_inset
+
+ le vecteur gravité
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $m_{0}$
+\end_inset
+
+ le champ magnétique terrestre 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $a$
+\end_inset
+
+ la mesure de l'accéléromètre, 
+\begin_inset Formula $a_{b}$
+\end_inset
+
+ le biais de mesure de l'accéléromètre,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $\delta_{acc}$
+\end_inset
+
+ le bruit de mesure de moyenne nulle
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $m$
+\end_inset
+
+ la mesure du magnétomètre 
+\begin_inset Formula $m_{b}$
+\end_inset
+
+ le biais de mesure du magnétomètre,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $\delta_{mag}$
+\end_inset
+
+ le bruit de mesure de moyenne nulle
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $gps$
+\end_inset
+
+ la mesure du GPS,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $\delta_{gps}$
+\end_inset
+
+ le bruit de mesure de moyenne nulle
+\end_layout
+
+\begin_layout Itemize
+Pour tout vecteur 
+\begin_inset Formula $x\in R^{3}$
+\end_inset
+
+ on note 
+\begin_inset Formula $S(x)$
+\end_inset
+
+ la matrice de préproduit vectoriel de 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Pour toute matrice antisymétrique 
+\begin_inset Formula $M\in R^{3\times3}$
+\end_inset
+
+ on note 
+\begin_inset Formula $Vect(M)$
+\end_inset
+
+ le vecteur dont cette matrice est la matrice de préproduit vectoriel.
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\sum F_{ext}$
+\end_inset
+
+ la somme des forces extérieures au drone s'appliquant sur celui-ci.
+\end_layout
+
+\begin_layout Subsection*
+Dynamique
+\end_layout
+
+\begin_layout Standard
+La dynamique du système est:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\text{\ensuremath{\dot{v}}=}\sum F_{ext}\\
+\dot{R}=RS(\Omega)
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Modèle de mesure
+\end_layout
+
+\begin_layout Standard
+Le modèle de mesure est:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\Omega_{gyro}=\Omega+\Omega_{b}+\delta_{gyro}\\
+a=R^{T}(\dot{v}-g)+a_{b}+\delta_{acc}\\
+m=R^{T}m_{0}+m_{b}+\delta_{mag}\\
+gps=v+\delta_{gps}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Estimation
+\end_layout
+
+\begin_layout Standard
+On considère l'état 
+\begin_inset Formula $X=(v,R,\Omega_{b},a_{b},m_{b})^{T}$
+\end_inset
+
+.
+ On a :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{flalign*}
+\dot{X} & =\begin{pmatrix}\dot{v}\\
+\dot{R}\\
+\dot{\Omega_{b}}\\
+\dot{a_{b}}\\
+\dot{m_{b}}
+\end{pmatrix}=\begin{pmatrix}\sum F_{ext}\\
+RS(\Omega)\\
+0\\
+0\\
+0
+\end{pmatrix}
+\end{flalign*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On utilise l'estimateur:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{flalign*}
+\dot{X} & =\begin{pmatrix}\dot{\hat{v}}\\
+\dot{\hat{R}}\\
+\dot{\hat{\Omega_{b}}}\\
+\dot{\hat{a_{b}}}\\
+\dot{\hat{m_{b}}}
+\end{pmatrix}=\begin{pmatrix}k_{GPS}(gps-\hat{v})\\
+R(S(\Omega_{gyro}-\Omega_{b})+\epsilon_{R})\\
+k_{GYRO}\epsilon_{R}\\
+k_{ba}(a-\hat{a_{b}}-R^{T}(\dot{\hat{v}}-g))\\
+k_{bm}(m-\hat{m_{b}}-R^{T}m_{0})
+\end{pmatrix}\\
+\epsilon_{R} & =k_{m}\epsilon_{m}+k_{a}\epsilon_{a}\\
+\epsilon_{m} & =\frac{(m-\hat{m_{b}})\times R^{T}m_{0}}{||m||\cdot||m_{0}||}\\
+\epsilon_{a} & =\frac{(a-\hat{a_{b}})\times R^{T}(\dot{\hat{v}}-g)}{||a||\cdot||g||}
+\end{flalign*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On peut augmenter l'estimation en faisant l'hypothèse que le mode avion
+ se déplace avec une vitesse moyenne colinéaire avec l'axe 
+\begin_inset Formula $x$
+\end_inset
+
+ du drone.
+\end_layout
+
+\begin_layout Standard
+On a ainsi une erreur en rotation augmentée:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{flalign*}
+\epsilon_{R} & =k_{m}\epsilon_{m}+k_{a}\epsilon_{a}+k_{x}\epsilon_{x}\\
+\epsilon_{x} & =\frac{x\times R^{T}\hat{v}}{max(0.1,||\hat{v}||)}
+\end{flalign*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Il est nécessaire de saturer les termes intégraux (
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\hat{\Omega_{b}}$
+\end_inset
+
+, 
+\begin_inset Formula $\hat{a_{b}}$
+\end_inset
+
+ , 
+\begin_inset Formula $\hat{m_{b}}$
+\end_inset
+
+) pour se prémunir contre les instabilités potentielles.
+\end_layout
+
+\end_body
+\end_document
